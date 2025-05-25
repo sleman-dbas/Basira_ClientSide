@@ -1,5 +1,6 @@
 * {
-  font-family: 'El Messiri', sans-serif !important;
+  font-family: 'Amiri', sans-serif !important; /* خط عربي مناسب */
+  direction: rtl; /* تأكيد اتجاه النص */
 }
 .login-logo {
   max-width: 82px;

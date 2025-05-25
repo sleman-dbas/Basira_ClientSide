@@ -23,13 +23,13 @@ const Home = () => {
       {/* شريط التنقل */}
       <nav aria-label="القائمة الرئيسية" className="main-nav">
         <div className="nav-container">
-          <img 
-            src="/images/logo.png" 
-            alt="شعار بصيرة - العودة للصفحة الرئيسية" 
+          <img
+            src="/images/logo.png"
+            alt="شعار بصيرة - العودة للصفحة الرئيسية"
             className="nav-logo"
             role="img"
           />
-          <button 
+          <button
             className="mobile-menu-button"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-expanded={isMenuOpen}
@@ -37,39 +37,42 @@ const Home = () => {
           >
             ☰
           </button>
-          
+
           <div className={`nav-links ${isMenuOpen ? 'active' : ''}`}>
             <Link to="/" className="nav-link" aria-current="page">الرئيسية</Link>
             <Link to="/courses" className="nav-link">الدورات التعليمية</Link>
             <Link to="/resources" className="nav-link">الموارد التعليمية</Link>
             <Link to="/contact" className="nav-link">الاتصال بنا</Link>
+            <Link to="/volunteer-tasks" className="nav-link">مهام المتطوعين</Link>
+            <Link to="/blind-interface" className="nav-link">واجهة المكفوفين</Link>
           </div>
 
           {/* أيقونة الحساب مع القائمة المنسدلة */}
           <div className="profile-menu-container" ref={profileMenuRef}>
-            <button 
+            <button
               className="profile-button"
               onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
-              aria-haspopup="true"
+              aria-controls="profile-menu"
               aria-expanded={isProfileMenuOpen}
               aria-label="إدارة الحساب"
             >
-              <img 
-                src="/images/account.png" 
-                alt="حساب المستخدم" 
+              <img
+                src="/images/account.png"
+                alt="حساب المستخدم"
                 className="user-icon"
                 role="img"
               />
             </button>
-            
-            <ul 
+
+            <ul
+              id="profile-menu"
               className={`profile-menu ${isProfileMenuOpen ? 'active' : ''}`}
               role="menu"
               aria-labelledby="profile-button"
             >
               <li role="none">
-                <Link 
-                  to="/profile" 
+                <Link
+                  to="/profile"
                   className="menu-item"
                   role="menuitem"
                   tabIndex={isProfileMenuOpen ? 0 : -1}
@@ -78,8 +81,8 @@ const Home = () => {
                 </Link>
               </li>
               <li role="none">
-                <Link 
-                  to="/settings" 
+                <Link
+                  to="/settings"
                   className="menu-item"
                   role="menuitem"
                   tabIndex={isProfileMenuOpen ? 0 : -1}
@@ -88,7 +91,7 @@ const Home = () => {
                 </Link>
               </li>
               <li role="none">
-                <button 
+                <button
                   className="menu-item"
                   role="menuitem"
                   tabIndex={isProfileMenuOpen ? 0 : -1}
@@ -106,23 +109,23 @@ const Home = () => {
       <section id="main-content" className="hero-section" aria-labelledby="hero-heading" tabIndex="-1">
         <div className="hero-content">
           <h1 id="hero-heading" className="hero-heading">
-            مرحبًا بكم في <span className="highlight">بصيرة</span> 
+            مرحبًا بكم في <span className="highlight">بصيرة</span>
             <span role="text" aria-label="منصة التعليم المخصصة للمكفوفين">منصة التعليم المخصصة للمكفوفين</span>
           </h1>
           <p className="hero-description">
             منصة تعليمية متكاملة مع أدوات تفاعلية مصممة خصيصًا لتلبية احتياجات المكفوفين وضعاف البصر
           </p>
           <div className="cta-buttons">
-            <Link 
-              to="/signup" 
+            <Link
+              to="/signup"
               className="cta-button primary"
               role="button"
               aria-label="إنشاء حساب جديد للبدء في التعلم"
             >
               ابدأ الرحلة التعليمية
             </Link>
-            <Link 
-              to="/login" 
+            <Link
+              to="/login"
               className="cta-button secondary"
               role="button"
               aria-label="الدخول إلى الحساب"
@@ -142,7 +145,7 @@ const Home = () => {
             <h3 id="feature1">مواد تعليمية مسموعة</h3>
             <p>محتوى صوتي عالي الجودة مع إمكانية التحكم في السرعة</p>
           </article>
-          
+
           <article className="feature-card" aria-labelledby="feature2">
             <div className="feature-icon" aria-hidden="true">🔍</div>
             <h3 id="feature2">واجهة قابلة للتكبير</h3>

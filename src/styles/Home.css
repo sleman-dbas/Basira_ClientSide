@@ -38,6 +38,8 @@
     justify-content: center;
     margin-top: 1rem;
     margin-right: 7rem;
+    direction: rtl;
+  text-align: right;
 }
 
 .nav-link {
@@ -176,6 +178,8 @@
   position: relative;
   order: 4;
   margin-left: auto;
+  direction: rtl;
+  text-align: right;
 }
 
 .profile-button {
@@ -278,6 +282,8 @@
 
     .feature-card {
         padding: 2rem;
+        direction: rtl;
+  text-align: right;
     }
 }
 
@@ -343,7 +349,7 @@
 
 @media (max-width: 480px) {
     .hero-heading {
-        font-size: 1.8rem;
+        font-size: 2rem;
     }
 
     .cta-button {

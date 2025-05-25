@@ -92,10 +92,10 @@ const Login = () => {
 
           {/* روابط إضافية */}
           <div className="links">
-            <Link to="/forgot-password" className="link">نسيت كلمة المرور؟</Link>
-            <Link to="/Signup" className="link">إنشاء حساب طالب جديد</Link>
-            <Link to="/Signup" className="link">إنشاء حساب متطوع جديد</Link>
-          </div>
+  <Link to="/forgot-password" className="link">نسيت كلمة المرور؟</Link>
+  <Link to="/signup" className="link">إنشاء حساب طالب جديد</Link>
+  <Link to="/signup" className="link">إنشاء حساب متطوع جديد</Link>
+</div>
         </form>
       </div>
     </main>

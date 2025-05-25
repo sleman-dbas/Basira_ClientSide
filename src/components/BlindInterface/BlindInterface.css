@@ -1,0 +1,32 @@
+/* الفئات المضافة */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.upload-box {
+  border: 3px dashed #1A237E;
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.radio-group label {
+  display: block;
+  margin: 0.5rem 0;
+}
+
+.upload-status {
+  padding: 1rem;
+  background: #2196F3;
+  color: white;
+  border-radius: 4px;
+  margin: 1rem 0;
+}

@@ -85,20 +85,19 @@ const Signup = () => {
           </div>
           {/* حقل الجنس */}
           <div className="input-group">
-            <label htmlFor="gender">الجنس</label>
-            <select class="custom-select"
-              id="gender"
-              value={gender}
-              onChange={(e) => setGender(e.target.value)}
-              className={errors.gender ? 'error' : ''}
-              aria-describedby="gender-error"
-              required
-            >
-              <option value="">اختر الجنس</option>
-              <option value="بشري">ذكر</option>
-              <option value="اسنان">انثى</option>
-
-            </select>
+    <label htmlFor="gender">الجنس</label>
+    <select 
+      className="custom-select"
+      id="gender"
+      value={gender}
+      onChange={(e) => setGender(e.target.value)}
+      aria-required="true"
+      aria-describedby="gender-error"
+    >
+      <option value="">اختر الجنس</option>
+      <option value="ذكر">ذكر</option>
+      <option value="أنثى">أنثى</option>
+    </select>
             {errors.gender && (
               <p id="gender-error" className="error-message" role="alert" aria-live="assertive">
                 ⚠️ {errors.gender}
@@ -164,8 +163,9 @@ const Signup = () => {
           <div className="input-group">
             <label htmlFor="email">البريد الإلكتروني</label>
             <input
-              type="email"
-              id="email"
+    type="email"
+    id="email"
+    aria-required="true"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="أدخل بريدك الإلكتروني"
@@ -180,7 +180,7 @@ const Signup = () => {
             )}
           </div>
 
-          {/* حقل كلمة المرور */}
+          {/* حقل كلم المرور */}
           <div className="input-group">
             <label htmlFor="password">كلمة المرور</label>
             <input

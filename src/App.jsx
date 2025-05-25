@@ -2,25 +2,29 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import ForgotPassword from './pages/ForgotPassword';
-import Home from './pages/Home'; // تأكد من صحة مسار الاستيراد
+import Home from './pages/Home';
+import VolunteerTasks from './components/VolunteerTasks/VolunteerTasks';
+import BlindInterface from './components/BlindInterface/BlindInterface';
 
 function App() {
   return (
     <Router>
       <Routes>
-        {/* الصفحة الرئيسية */}
+        {/* Main Routes */}
         <Route path="/" element={<Home />} />
-        
-        {/* الصفحات الأخرى */}
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         
-        {/* مسار احتياطي لأي رابط غير موجود */}
+        {/* Feature Routes */}
+        <Route path="/volunteer-tasks" element={<VolunteerTasks />} />
+        <Route path="/blind-interface" element={<BlindInterface />} />
+        
+        {/* Fallback Route */}
         <Route path="*" element={<div>404 - Page Not Found</div>} />
       </Routes>
     </Router>
   );
 }
-/*jjjjjjj*/
+
 export default App;
