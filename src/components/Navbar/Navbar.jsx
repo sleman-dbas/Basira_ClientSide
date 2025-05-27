@@ -1,5 +1,6 @@
+// src/components/Navbar/Navbar.jsx
 import { useState, useRef, useEffect } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -21,10 +22,10 @@ const Navbar = () => {
   return (
     <nav aria-label="القائمة الرئيسية" className="main-nav">
       <div className="nav-container">
-        <Link to="/" className="nav-logo-link">
+        <Link to="/">
           <img
             src="/images/logo.png"
-            alt="شعار المنصة"
+            alt="شعار بصيرة - العودة للصفحة الرئيسية"
             className="nav-logo"
             role="img"
           />
@@ -40,39 +41,20 @@ const Navbar = () => {
         </button>
 
         <div className={`nav-links ${isMenuOpen ? 'active' : ''}`}>
-          <NavLink 
-            to="/" 
-            className={({ isActive }) => 
-              isActive ? "nav-link active" : "nav-link"
-            }
-            end
-          >
-            الرئيسية
-          </NavLink>
-          
-          <NavLink 
-            to="/volunteer-tasks"
-            className={({ isActive }) => 
-              isActive ? "nav-link active" : "nav-link"
-            }
-          >
-            مهام المتطوعين
-          </NavLink>
-          
-          <NavLink 
-            to="/blind-interface"
-            className={({ isActive }) => 
-              isActive ? "nav-link active" : "nav-link"
-            }
-          >
-            واجهة المكفوفين
-          </NavLink>
+          <Link to="/" className="nav-link" aria-current="page">الرئيسية</Link>
+          <Link to="/courses" className="nav-link">الدورات التعليمية</Link>
+          <Link to="/resources" className="nav-link">الموارد التعليمية</Link>
+          <Link to="/contact" className="nav-link">الاتصال بنا</Link>
+          <Link to="/volunteer-tasks" className="nav-link">مهام المتطوعين</Link>
+          <Link to="/blind-interface" className="nav-link">واجهة المكفوفين</Link>
         </div>
 
         <div className="profile-menu-container" ref={profileMenuRef}>
           <button
             className="profile-button"
             onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
+            aria-controls="profile-menu"
+            aria-expanded={isProfileMenuOpen}
             aria-label="إدارة الحساب"
           >
             <img
@@ -83,19 +65,39 @@ const Navbar = () => {
             />
           </button>
 
-          <ul className={`profile-menu ${isProfileMenuOpen ? 'active' : ''}`}>
-            <li>
-              <Link to="/profile" className="menu-item">
+          <ul
+            id="profile-menu"
+            className={`profile-menu ${isProfileMenuOpen ? 'active' : ''}`}
+            role="menu"
+            aria-labelledby="profile-button"
+          >
+            <li role="none">
+              <Link
+                to="/profile"
+                className="menu-item"
+                role="menuitem"
+                tabIndex={isProfileMenuOpen ? 0 : -1}
+              >
                 الملف الشخصي
               </Link>
             </li>
-            <li>
-              <Link to="/settings" className="menu-item">
+            <li role="none">
+              <Link
+                to="/settings"
+                className="menu-item"
+                role="menuitem"
+                tabIndex={isProfileMenuOpen ? 0 : -1}
+              >
                 الإعدادات
               </Link>
             </li>
-            <li>
-              <button className="menu-item">
+            <li role="none">
+              <button
+                className="menu-item"
+                role="menuitem"
+                tabIndex={isProfileMenuOpen ? 0 : -1}
+                aria-label="تسجيل الخروج"
+              >
                 تسجيل الخروج
               </button>
             </li>

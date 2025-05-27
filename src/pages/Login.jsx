@@ -1,38 +1,90 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import '../styles/Login.css'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import '../styles/Login.css';
+
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
-  const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const validateForm = () => {
-    const newErrors = {};
-    if (!email.includes('@')) newErrors.email = 'البريد الإلكتروني غير صحيح';
-    if (password.length < 6) newErrors.password = 'كلمة المرور يجب أن تحتوي على 6 أحرف على الأقل';
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    let isValid = true;
+    
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      toast.error('البريد الإلكتروني غير صحيح', { rtl: true });
+      isValid = false;
+    }
+    
+    if (password.length < 6) {
+      toast.error('كلمة المرور يجب أن تحتوي على 6 أحرف على الأقل', { rtl: true });
+      isValid = false;
+    }
+
+    return isValid;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      navigate('/dashboard');
+    if (!validateForm()) return;
+    setIsLoading(true);
+
+    try {
+      const response = await fetch('http://192.168.1.6:3000/api/users/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'فشل في عملية التسجيل');
+      }
+
+      // حفظ التوكن
+      const storage = rememberMe ? localStorage : sessionStorage;
+      storage.setItem('userToken', data.token);
+
+      toast.success('تم تسجيل الدخول بنجاح!', { rtl: true });
+      setTimeout(() => navigate('/dashboard'), 2000);
+
+    } catch (error) {
+      
+      let errorMessage = error.message;
+      
+      if (error.message.includes('Failed to fetch')) {
+        errorMessage = 'تعذر الاتصال بالخادم';
+      } else if (error.message.includes('credentials')) {
+        errorMessage = 'بيانات الاعتماد غير صحيحة';
+      }
+      
+      toast.error(errorMessage, { rtl: true });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <main role="main" className="login-container">
-      <div className="login-wrapper">
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        newestOnTop
+        closeOnClick
+        rtl={true}
+        theme="colored"
+      />
 
+      <div className="login-wrapper">
         <img src="/images/logo.png" alt="شعار النظام" className="login-logo" />
-        <h1 className="login-title">تسجيل الدخول إلى بصيرة </h1>
+        <h1 className="login-title">تسجيل الدخول إلى بصيرة</h1>
 
         <form onSubmit={handleSubmit} noValidate>
           {/* حقل البريد الإلكتروني */}
-
           <div className="input-group">
             <label htmlFor="email">البريد الإلكتروني</label>
             <input
@@ -41,15 +93,8 @@ const Login = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="أدخل بريدك الإلكتروني"
-              aria-describedby="email-error"
-              className={errors.email ? 'error' : ''}
               required
             />
-            {errors.email && (
-              <p id="email-error" className="error-message" role="alert">
-                ⚠️ {errors.email}
-              </p>
-            )}
           </div>
 
           {/* حقل كلمة المرور */}
@@ -61,15 +106,8 @@ const Login = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="أدخل كلمة المرور"
-              aria-describedby="password-error"
-              className={errors.password ? 'error' : ''}
               required
             />
-            {errors.password && (
-              <p id="password-error" className="error-message" role="alert">
-                ⚠️ {errors.password}
-              </p>
-            )}
           </div>
 
           {/* خيار تذكرني */}
@@ -86,16 +124,20 @@ const Login = () => {
           </div>
 
           {/* زر التسجيل */}
-          <button type="submit" className="login-button">
-            تسجيل الدخول
+          <button 
+            type="submit" 
+            className="login-button"
+            disabled={isLoading}
+          >
+            {isLoading ? 'جاري تسجيل الدخول...' : 'تسجيل الدخول'}
           </button>
 
           {/* روابط إضافية */}
           <div className="links">
-  <Link to="/forgot-password" className="link">نسيت كلمة المرور؟</Link>
-  <Link to="/signup" className="link">إنشاء حساب طالب جديد</Link>
-  <Link to="/signup" className="link">إنشاء حساب متطوع جديد</Link>
-</div>
+            <Link to="/forgot-password" className="link">نسيت كلمة المرور؟</Link>
+            <Link to="/volunteer-test" className="link">إنشاء حساب متطوع جديد</Link>
+            <Link to="/signup" className="link">إنشاء حساب طالب جديد</Link>
+          </div>
         </form>
       </div>
     </main>

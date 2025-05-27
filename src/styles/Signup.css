@@ -6,6 +6,7 @@
   border-radius: 50%;
   transition: transform 0.3s ease;
 }*/
+
 .signup-container {
   display: flex;
   justify-content: center;
@@ -74,7 +75,68 @@
   .signup-button:hover {
     opacity: 0.9;
   }
-  
+  .multi-select-container {
+  position: relative;
+}
+.error-msg {
+  color: #ff0000;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+.multi-select {
+  height: 120px;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-top: 5px;
+}
+
+.multi-select option {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.multi-select option:hover {
+  background-color: #f0f0f0;
+}
+
+.selected-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.selected-tag {
+  background-color: #e0e0e0;
+  padding: 5px 12px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.selected-tag button {
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 5px;
+  font-size: 16px;
+}
+
+.selected-tag button:hover {
+  color: #ff4444;
+}
+
+.select-hint {
+  display: block;
+  color: #666;
+  font-size: 0.85em;
+  margin-top: 5px;
+}
   @media (max-width: 768px) {
     .signup-hero img {
       max-width: 120px;
@@ -87,6 +149,7 @@
     .signup-title {
       font-size: 1.3rem;
     }
+
   }
   
   @media (max-width: 480px) {

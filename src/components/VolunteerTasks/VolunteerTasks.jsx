@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './VolunteerTasks.css';
-import Navbar from '../../components/Navbar/Navbar';
+import Navbar from '../../components/Navbar/Navbar'; // تأكد من المسار الصحيح
 
 const VolunteerTasks = () => {
   const [tasks] = useState({
@@ -17,9 +17,10 @@ const VolunteerTasks = () => {
   });
 
   return (
-    
     <div className="volunteer-tasks-container" dir="rtl">
-      
+      {/* إضافة الـ Navbar هنا */}
+      <Navbar />
+
       {/* الأقسام الثلاثة الرئيسية */}
       <div className="tasks-grid">
         {/* المهام غير المنجزة */}
