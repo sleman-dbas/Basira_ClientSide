@@ -56,6 +56,98 @@
     color: #1A237E;
 }
 
+/* قسم معرض الصور */
+.gallery-section {
+    padding: 3rem 1rem;
+    background: #fff;
+    text-align: center;
+}
+
+.image-slider {
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.slide-container {
+    position: relative;
+    height: 400px;
+}
+
+.slide-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.slider-controls {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 10;
+}
+
+.slider-button {
+    background: rgba(26, 35, 126, 0.8);
+    color: #FFA500;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.slider-button:hover {
+    background: #1A237E;
+    transform: scale(1.1);
+}
+
+.slide-indicators {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+}
+
+.indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid #1A237E;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.indicator.active {
+    background: #FFA500;
+    border-color: #1A237E;
+}
+
+.voice-instructions {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: #F8F9FA;
+    border-radius: 4px;
+    color: #1A237E;
+    font-size: 0.9rem;
+}
+
 /* قسم الميزات */
 .features {
     padding: 2rem 1rem;
@@ -156,4 +248,29 @@
     .cta-button {
         width: 100%;
     }
+    
+    .slide-container {
+        height: 300px;
+    }
+    
+    .slider-controls {
+        bottom: 10px;
+    }
+    
+    .slider-button {
+        width: 35px;
+        height: 35px;
+    }
+}
+
+/* النصوص المخفية لقارئات الشاشة */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
 }

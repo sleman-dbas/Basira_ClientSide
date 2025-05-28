@@ -5,7 +5,30 @@ import '../styles/Home.css';
 const Home = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [autoSlide, setAutoSlide] = useState(true);
   const profileMenuRef = useRef(null);
+  const slideRef = useRef(null);
+  const intervalRef = useRef(null);
+
+  // صور ووصفها الصوتي
+  const slides = [
+    {
+      image: "/images/event1.jpg",
+      alt: "طلاب مكفوفين يستمعون إلى محاضرة صوتية في قاعة دراسية",
+      description: "طلاب مكفوفين يستمعون إلى محاضرة صوتية في قاعة دراسية مجهزة بأحدث التقنيات المساعدة"
+    },
+    {
+      image: "/images/event2.jpg",
+      alt: "متطوع يشرح مادة دراسية لطالب مكفوف باستخدام أجهزة مساعدة",
+      description: "متطوع يشرح مادة دراسية لطالب مكفوف باستخدام أجهزة مساعدة في مركز بصيرة التعليمي"
+    },
+    {
+      image: "/images/event3.jpg",
+      alt: "ورشة عمل للمكفوفين لتعليم استخدام التقنيات المساعدة",
+      description: "ورشة عمل للمكفوفين لتعليم استخدام التقنيات المساعدة في التعلم الذاتي"
+    }
+  ];
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -17,6 +40,68 @@ const Home = () => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  // إدارة السلايدر التلقائي
+  useEffect(() => {
+    if (autoSlide) {
+      intervalRef.current = setInterval(() => {
+        goToNextSlide();
+      }, 5000);
+    }
+    
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [autoSlide, currentSlide]);
+
+  const goToNextSlide = () => {
+    setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
+    announceSlideChange();
+  };
+
+  const goToPrevSlide = () => {
+    setCurrentSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
+    announceSlideChange();
+  };
+
+  const goToSlide = (index) => {
+    setCurrentSlide(index);
+    announceSlideChange();
+  };
+
+  const announceSlideChange = () => {
+    if (slideRef.current) {
+      slideRef.current.focus();
+      
+      // إعلان تغيير الشريحة صوتياً للمكفوفين
+      const utterance = new SpeechSynthesisUtterance(slides[currentSlide].description);
+      utterance.lang = 'ar-SA';
+      speechSynthesis.speak(utterance);
+    }
+  };
+
+  const toggleAutoSlide = () => {
+    setAutoSlide(!autoSlide);
+    if (!autoSlide) {
+      intervalRef.current = setInterval(goToNextSlide, 5000);
+    } else {
+      clearInterval(intervalRef.current);
+    }
+  };
+
+  // اختصارات لوحة المفاتيح للتحكم في السلايدر
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'ArrowRight') goToNextSlide();
+      if (e.key === 'ArrowLeft') goToPrevSlide();
+      if (e.key === ' ') toggleAutoSlide();
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [autoSlide]);
 
   return (
     <div role="main" aria-label="الصفحة الرئيسية لموقع بصيرة">
@@ -40,8 +125,6 @@ const Home = () => {
 
           <div className={`nav-links ${isMenuOpen ? 'active' : ''}`}>
             <Link to="/" className="nav-link" aria-current="page">الرئيسية</Link>
-            <Link to="/courses" className="nav-link">الدورات التعليمية</Link>
-            <Link to="/resources" className="nav-link">الموارد التعليمية</Link>
             <Link to="/contact" className="nav-link">الاتصال بنا</Link>
             <Link to="/volunteer-tasks" className="nav-link">مهام المتطوعين</Link>
             <Link to="/blind-interface" className="nav-link">واجهة المكفوفين</Link>
@@ -133,6 +216,77 @@ const Home = () => {
               الدخول إلى الحساب
             </Link>
           </div>
+        </div>
+      </section>
+
+      {/* سلايدر الصور */}
+      <section className="gallery-section" aria-labelledby="gallery-heading">
+        <h2 id="gallery-heading" className="section-heading">معرض فعاليات بصيرة</h2>
+        
+        <div 
+          className="image-slider"
+          tabIndex="0"
+          ref={slideRef}
+          aria-live="polite"
+          aria-atomic="true"
+          aria-describedby="slide-description"
+        >
+          <div className="slider-controls">
+            <button 
+              className="slider-button prev" 
+              onClick={goToPrevSlide}
+              aria-label="الشريحة السابقة"
+            >
+              &lt;
+            </button>
+            
+            <button 
+              className="slider-button toggle" 
+              onClick={toggleAutoSlide}
+              aria-label={autoSlide ? "إيقاف التمرير التلقائي" : "تشغيل التمرير التلقائي"}
+            >
+              {autoSlide ? "⏸️" : "▶️"}
+            </button>
+            
+            <button 
+              className="slider-button next" 
+              onClick={goToNextSlide}
+              aria-label="الشريحة التالية"
+            >
+              &gt;
+            </button>
+          </div>
+          
+          <div className="slide-container">
+            <img 
+              src={slides[currentSlide].image} 
+              alt={slides[currentSlide].alt} 
+              className="slide-image"
+              aria-describedby={`slide-description-${currentSlide}`}
+            />
+            <p 
+              id={`slide-description-${currentSlide}`} 
+              className="visually-hidden"
+            >
+              {slides[currentSlide].description}
+            </p>
+          </div>
+          
+          <div className="slide-indicators">
+            {slides.map((_, index) => (
+              <button
+                key={index}
+                className={`indicator ${index === currentSlide ? 'active' : ''}`}
+                onClick={() => goToSlide(index)}
+                aria-label={`الذهاب إلى الشريحة ${index + 1}`}
+                aria-current={index === currentSlide}
+              />
+            ))}
+          </div>
+        </div>
+        
+        <div className="voice-instructions">
+          <p>استخدم الأسهم اليمنى واليسرى للتنقل بين الصور، والمسافة للتحكم في التمرير التلقائي</p>
         </div>
       </section>
 
