@@ -3,6 +3,56 @@
   min-height: 100vh;
 }
 
+.tasks-header {
+  max-width: 1200px;
+  margin: 0 auto 2rem;
+  text-align: center;
+  padding: 1rem;
+}
+
+.tasks-header h1 {
+  color: #1A237E;
+  margin-bottom: 0.5rem;
+  font-size: 2rem;
+}
+
+.tasks-header p {
+  color: #666;
+  max-width: 800px;
+  margin: 0 auto;
+  font-size: 1.1rem;
+}
+
+.upload-message {
+  max-width: 1200px;
+  margin: 0 auto 1rem;
+  padding: 1rem;
+  background: #fff8e1;
+  border-left: 4px solid #ffc107;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: #856404;
+  position: relative;
+}
+
+.upload-message i {
+  font-size: 1.5rem;
+}
+
+.close-message {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #856404;
+}
+
 /* تخطيط الأقسام الثلاثة */
 .tasks-grid {
   display: grid;
@@ -15,15 +65,29 @@
 .tasks-section {
   background: white;
   border-radius: 8px;
-  padding: 1rem;
+  padding: 1.5rem;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+.tasks-section:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
 .section-title {
   color: #1A237E;
-  margin-bottom: 1rem;
-  font-size: 1.3rem;
+  margin-bottom: 1.5rem;
+  font-size: 1.4rem;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.section-title i {
+  font-size: 1.2rem;
 }
 
 /* تصميم القوائم */
@@ -39,6 +103,11 @@
   border-radius: 6px;
   background: #f8f9fa;
   border-left: 4px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.task-item:hover {
+  background: #eef2ff;
 }
 
 .task-item.completed {
@@ -49,54 +118,180 @@
   border-left-color: #f44336;
 }
 
-/* شريط التقدم */
-.progress-container {
-  width: 100%;
-  height: 6px;
-  background: #e0e0e0;
-  border-radius: 3px;
+.task-item h3 {
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-top: 0.5rem;
+}
+
+.task-item.completed .status-badge {
+  background: rgba(76, 175, 80, 0.1);
+  color: #4CAF50;
+}
+
+.task-item.canceled .status-badge {
+  background: rgba(244, 67, 54, 0.1);
+  color: #f44336;
+}
+
+.file-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   margin: 0.5rem 0;
-}
-
-.progress-bar {
-  height: 100%;
-  background: #1A237E;
-  border-radius: 3px;
-  transition: width 0.3s ease;
-}
-
-.progress-text {
-  color: #1A237E;
   font-size: 0.9rem;
 }
 
-/* قسم الرفع */
-.upload-section {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 1rem;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+.file-status i {
+  color: #1A237E;
 }
 
-.upload-box {
-  border: 2px dashed #1A237E;
-  border-radius: 8px;
-  padding: 2rem;
-  text-align: center;
+.no-file {
+  color: #f44336;
+  font-size: 0.9rem;
 }
 
-.upload-button {
+.file-upload-container {
+  margin: 0.5rem 0;
+}
+
+.file-input {
+  display: none;
+}
+
+.file-upload-btn {
+  display: inline-block;
   background: #1A237E;
   color: white;
-  border: none;
-  padding: 0.8rem 2rem;
+  padding: 0.5rem 1rem;
   border-radius: 4px;
   cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: fit-content;
+}
+
+.file-upload-btn:hover {
+  background: #0d47a1;
+}
+
+/* أزرار المهام */
+.task-actions {
+  display: flex;
+  gap: 0.5rem;
   margin-top: 1rem;
 }
 
-.upload-button:hover {
-  opacity: 0.9;
+.complete-btn,
+.cancel-btn {
+  padding: 0.7rem 1rem;
+  border: none;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.complete-btn {
+  background: #4CAF50;
+  color: white;
+}
+
+.complete-btn:hover {
+  background: #3d8b40;
+}
+
+.cancel-btn {
+  background: #f44336;
+  color: white;
+}
+
+.cancel-btn:hover {
+  background: #d32f2f;
+}
+
+.file-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #1A237E;
+  font-size: 0.9rem;
+  margin: 0.5rem 0;
+}
+
+/* ============== وسائط متجاوبة ============== */
+
+/* أجهزة لوحية وشاشات متوسطة */
+@media (max-width: 991px) {
+  .tasks-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .tasks-grid > :last-child {
+    grid-column: span 2;
+  }
+  
+  .tasks-header h1 {
+    font-size: 1.8rem;
+  }
+  
+  .section-title {
+    font-size: 1.2rem;
+  }
+}
+
+/* هواتف وأجهزة صغيرة */
+@media (max-width: 767px) {
+  .tasks-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .tasks-grid > :last-child {
+    grid-column: span 1;
+  }
+  
+  .tasks-list {
+    height: 300px;
+  }
+}
+
+/* هواتف صغيرة جدًا */
+@media (max-width: 480px) {
+  
+  
+  .tasks-section {
+background-color: #8c899f;  }
+  
+  .section-title {
+    font-size: 1.1rem;
+  }
+  
+  .task-item {
+    padding: 0.8rem;
+  }
+  
+  .task-actions {
+    flex-direction: column;
+  }
+  
+  .complete-btn, 
+  .cancel-btn {
+    width: 100%;
+    justify-content: center;
+  }
 }

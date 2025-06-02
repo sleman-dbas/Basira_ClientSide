@@ -128,6 +128,8 @@ const Home = () => {
             <Link to="/contact" className="nav-link">الاتصال بنا</Link>
             <Link to="/volunteer-tasks" className="nav-link">مهام المتطوعين</Link>
             <Link to="/blind-interface" className="nav-link">واجهة المكفوفين</Link>
+            <Link to="/coordinator-dashboard" className="nav-link">لوحة التحكم</Link>
+
           </div>
 
           {/* أيقونة الحساب مع القائمة المنسدلة */}

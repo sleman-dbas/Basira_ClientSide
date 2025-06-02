@@ -45,7 +45,6 @@
 .nav-link {
   color: #FFA500;
   text-decoration: none;
-  padding: 0.5rem;
   border-radius: 4px;
   transition: opacity 0.3s;
 }
@@ -87,18 +86,19 @@
 }
 
 .profile-menu {
-  position: absolute;
-  right: 0;
-  top: 100%;
-  background: #1A237E;
+ display: none;
+ 
   list-style: none;
-  padding: 0.5rem;
-  margin: 0.5rem 0;
-  border-radius: 4px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  min-width: 180px;
-  display: none;
-  z-index: 1000;
+      flex-direction: column;
+      background: #1a237e;
+      padding: 0.5rem;
+      box-shadow: -2px 4px 6px #1a237e;
+      border-radius: 8px;
+      position: absolute;
+    top: 133%;
+      z-index: 1000;
+     
+    margin-right: -8rem;
 }
 
 .profile-menu.active {
@@ -106,13 +106,15 @@
 }
 
 .menu-item {
-  color: #FFA500;
-  text-decoration: none;
   padding: 0.75rem 1rem;
   display: block;
   text-align: right;
-  transition: background 0.2s;
-  border-radius: 3px;
+  color: #FFA500;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: opacity 0.3s;
+  background-color: #1A237E;
+  border: #1A237E;
 }
 
 .menu-item:hover,
@@ -148,7 +150,7 @@
   }
 
   .nav-container {
-      justify-content: center;
+      justify-content: space-between;
       position: relative;
       padding: 0 15px;
   }
@@ -175,7 +177,6 @@
 
   .nav-links.active {
       display: flex;
-      top: 130px;
   }
 
   .nav-link {

@@ -42,11 +42,11 @@ const Navbar = () => {
 
         <div className={`nav-links ${isMenuOpen ? 'active' : ''}`}>
           <Link to="/" className="nav-link" aria-current="page">الرئيسية</Link>
-          <Link to="/courses" className="nav-link">الدورات التعليمية</Link>
-          <Link to="/resources" className="nav-link">الموارد التعليمية</Link>
           <Link to="/contact" className="nav-link">الاتصال بنا</Link>
           <Link to="/volunteer-tasks" className="nav-link">مهام المتطوعين</Link>
           <Link to="/blind-interface" className="nav-link">واجهة المكفوفين</Link>
+          <Link to="/coordinator-dashboard" className="nav-link">لوحة التحكم</Link>
+
         </div>
 
         <div className="profile-menu-container" ref={profileMenuRef}>
