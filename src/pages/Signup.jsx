@@ -44,7 +44,7 @@ const Signup = () => {
         studyYear: parseInt(academicYear.replace(/[^0-9]/g, '')) // تحويل "السنة الأولى" إلى 1
       };
 
-      const response = await fetch('http://192.168.1.6:3000/api/students/register', {
+      const response = await fetch('http://localhost:3000/api/students/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestBody)

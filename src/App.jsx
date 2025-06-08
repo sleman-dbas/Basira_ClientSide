@@ -7,6 +7,9 @@ import Home from './pages/Home';
 import VolunteerTasks from './components/VolunteerTasks/VolunteerTasks';
 import BlindInterface from './components/BlindInterface/BlindInterface';
 import CoordinatorDashboard from './pages/CoordinatorDashboard';
+import VerifyOTP from './pages/VerfiyOtp';
+import AdminDashboard from './pages/AdminDashboard';
+
 
 function App() {
   return (
@@ -19,9 +22,10 @@ function App() {
         <Route path="/volunteer-test" element={<VolunteerTest />} />
 
         <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/admin-dashboard" element={<AdminDashboard />} />
 
         <Route path="/coordinator-dashboard" element={<CoordinatorDashboard />} />
-
+        <Route path="/verify-otp" element={<VerifyOTP />} />
         {/* Feature Routes */}
         <Route path="/volunteer-tasks" element={<VolunteerTasks />} />
         <Route path="/blind-interface" element={<BlindInterface />} />

@@ -1,0 +1,158 @@
+/* src/components/ImgButton/ImgButton.css */
+.img-button {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  width: 60px;
+  height: 60px;
+  background-color: #FF9800;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+.img-button:hover {
+  background-color: #F57C00;
+  transform: scale(1.1);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+.img-button.active {
+  background-color: #4CAF50;
+}
+
+.img-icon {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.img-modal {
+  position: fixed;
+  bottom: 100px;
+  right: 25px;
+  width: 350px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  z-index: 999;
+  animation: slideUp 0.4s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-content {
+  padding: 20px;
+  position: relative;
+}
+
+.close-button {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #777;
+  transition: color 0.2s;
+}
+
+.close-button:hover {
+  color: #333;
+}
+
+.image-header {
+  text-align: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 15px;
+}
+
+.image-header h2 {
+  margin: 0 0 5px 0;
+  color: #FF9800;
+}
+
+.image-header p {
+  margin: 0;
+  color: #777;
+  font-size: 0.9rem;
+}
+
+.image-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.image-item {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: transform 0.3s;
+}
+
+.image-item:hover {
+  transform: translateY(-5px);
+}
+
+.image-item img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  display: block;
+}
+
+.image-caption {
+  padding: 10px;
+  background-color: #f9f9f9;
+  text-align: center;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .img-button {
+    bottom: 20px;
+    right: 20px;
+    width: 55px;
+    height: 55px;
+  }
+  
+  .img-modal {
+    width: 300px;
+    right: 10px;
+    bottom: 85px;
+  }
+  
+  .image-item img {
+    height: 130px;
+  }
+}
+
+@media (max-width: 480px) {
+  .img-modal {
+    width: 280px;
+    right: 50%;
+    transform: translateX(50%);
+    bottom: 80px;
+  }
+}

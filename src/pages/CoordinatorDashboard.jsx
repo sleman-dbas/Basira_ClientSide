@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Navbar from '../components/Navbar/Navbar';
 import '../styles/CoordinatorDashboard.css';
-
+import VolunteerStatsButton from '../components/VolunteerStatsButton/VolunteerStatsButton';
 const CoordinatorDashboard = () => {
   // الحالات الحالية
   const [volunteers, setVolunteers] = useState([
@@ -191,6 +191,7 @@ const CoordinatorDashboard = () => {
   };
 
   return (
+    
     <div className="coordinator-dashboard" role="main" aria-label="لوحة تحكم المنسق">
       <Navbar />
       
@@ -513,6 +514,8 @@ const CoordinatorDashboard = () => {
           {notification}
         </div>
       )}
+      <VolunteerStatsButton />
+
     </div>
   );
 };

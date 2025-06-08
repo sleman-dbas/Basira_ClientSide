@@ -1,42 +1,167 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './VolunteerTasks.css';
 import Navbar from '../../components/Navbar/Navbar';
+import ImgButton from '../../components/ImgButton/ImgButton';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const VolunteerTasks = () => {
   const [tasks, setTasks] = useState({
-    uncompleted: [
-      { id: 1, title: 'تحويل محاضرة الفيزياء إلى ملف صوتي', file: null },
-      { id: 2, title: 'مراجعة ملاحظات الطلاب', file: null },
-      { id: 5, title: 'تسجيل محاضرة الأحياء', file: null },
-      { id: 6, title: 'ترجمة الفيديو التعليمي', file: null }
-    ],
-    completed: [
-      { id: 3, title: 'تحويل كتاب الكيمياء', file: 'chemistry.mp3' },
-      { id: 7, title: 'تسجيل محاضرة الجبر', file: 'algebra.mp3' },
-      { id: 8, title: 'مراجعة تمارين التفاضل', file: 'calculus.mp3' }
-    ],
-    canceled: [
-      { id: 4, title: 'تسجيل محاضرة الرياضيات', file: null },
-      { id: 9, title: 'تحويل كتاب التاريخ', file: null }
-    ]
+    uncompleted: [],
+    completed: [],
+    canceled: []
   });
   
   const [selectedTask, setSelectedTask] = useState(null);
   const [showUploadMessage, setShowUploadMessage] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [volunteerId, setVolunteerId] = useState(null);
   const fileInputRef = useRef(null);
 
-  // نقل المهمة إلى القسم الملغى
-  const cancelTask = (taskId) => {
-    setTasks(prev => {
-      const taskToCancel = prev.uncompleted.find(task => task.id === taskId);
-      if (!taskToCancel) return prev;
+  // جلب جميع المهام من API
+  const fetchAllTasks = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      const token = localStorage.getItem('userToken') || sessionStorage.getItem('userToken');
+      
+      if (!token) {
+        throw new Error('لم يتم العثور على توكن المستخدم');
+      }
+      
+      // فك تشفير التوكن لاستخراج volunteerId
+      const decodedToken = JSON.parse(atob(token.split('.')[1]));
+      if (!decodedToken || !decodedToken.id) {
+        throw new Error('فشل في فك تشفير التوكن أو لم يتم العثور على معرف المتطوع');
+      }
+      
+      const volunteerId = decodedToken.id;
+      setVolunteerId(volunteerId);
+      
+      // جلب جميع أنواع المهام بشكل متوازي
+      const [waitingRes, completedRes, canceledRes] = await Promise.all([
+        fetch(`http://localhost:3000/api/volunteers/display-volunteer-waiting-files/${volunteerId}`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        }),
+        fetch(`http://localhost:3000/api/volunteers/display-volunteer-completed-files/${volunteerId}`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        }),
+        fetch(`http://localhost:3000/api/volunteers/display-volunteer-cansled-files/${volunteerId}`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        })
+      ]);
 
-      return {
-        ...prev,
-        uncompleted: prev.uncompleted.filter(task => task.id !== taskId),
-        canceled: [...prev.canceled, taskToCancel]
-      };
-    });
+      // التحقق من نجاح جميع الطلبات
+      if (!waitingRes.ok) throw new Error('فشل في جلب المهام غير المنجزة');
+      if (!completedRes.ok) throw new Error('فشل في جلب المهام المنجزة');
+      if (!canceledRes.ok) throw new Error('فشل في جلب المهام الملغاة');
+      
+      // تحويل الردود إلى JSON
+      const [waitingData, completedData, canceledData] = await Promise.all([
+        waitingRes.json(),
+        completedRes.json(),
+        canceledRes.json()
+      ]);
+      
+      // تحديث حالة المهام
+      setTasks({
+        uncompleted: waitingData.data.map(task => ({
+          id: task._id,
+          title: task.title,
+          file: task.filePath
+        })),
+        completed: completedData.data.map(task => ({
+          id: task._id,
+          title: task.title,
+          file: task.filePath
+        })),
+        canceled: canceledData.data.map(task => ({
+          id: task._id,
+          title: task.title,
+          file: task.filePath
+        }))
+      });
+      
+    } catch (err) {
+      setError(err.message);
+      toast.error(`خطأ: ${err.message}`, { rtl: true });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // جلب المهام عند تحميل المكون
+  useEffect(() => {
+    fetchAllTasks();
+  }, []);
+
+  // نقل المهمة إلى القسم الملغى
+  const cancelTask = async (taskId) => {
+    try {
+      const token = localStorage.getItem('userToken') || sessionStorage.getItem('userToken');
+      
+      const response = await fetch(`http://localhost:3000/api/volunteers/cancel-task/${taskId}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ volunteerId })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'فشل في إلغاء المهمة');
+      }
+
+      // إعادة جلب المهام بعد التحديث
+      await fetchAllTasks();
+      toast.success('تم إلغاء المهمة بنجاح', { rtl: true });
+      
+    } catch (error) {
+      toast.error(`خطأ: ${error.message}`, { rtl: true });
+    }
+  };
+
+  // نقل المهمة إلى القسم المنجز
+  const completeTask = async (taskId) => {
+    try {
+      const task = tasks.uncompleted.find(t => t.id === taskId);
+      if (!task) throw new Error('لم يتم العثور على المهمة');
+      
+      const token = localStorage.getItem('userToken') || sessionStorage.getItem('userToken');
+      const formData = new FormData();
+      
+      // إضافة الملف إذا كان متاحاً
+      if (task.file) {
+        // في تطبيق حقيقي، هنا نضيف ملف الفعلي
+        // formData.append('file', fileObject);
+        formData.append('fileName', task.file);
+      }
+      
+      const response = await fetch(`http://localhost:3000/api/volunteers/complete-task/${taskId}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        body: formData
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'فشل في إكمال المهمة');
+      }
+
+      // إعادة جلب المهام بعد التحديث
+      await fetchAllTasks();
+      toast.success('تم إكمال المهمة بنجاح', { rtl: true });
+      
+    } catch (error) {
+      toast.error(`خطأ: ${error.message}`, { rtl: true });
+    } finally {
+      setShowUploadMessage(false);
+    }
   };
 
   // محاولة إكمال المهمة
@@ -44,11 +169,9 @@ const VolunteerTasks = () => {
     const task = tasks.uncompleted.find(t => t.id === taskId);
     
     if (!task.file) {
-      // إذا لم يتم رفع ملف، قم بتحديد المهمة وعرض رسالة
       setSelectedTask(taskId);
       setShowUploadMessage(true);
       
-      // ركز على حقل الرفع
       setTimeout(() => {
         if (fileInputRef.current) {
           fileInputRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -58,24 +181,7 @@ const VolunteerTasks = () => {
       return;
     }
     
-    // إذا كان الملف مرفوعًا، انقل المهمة إلى المكتملة
     completeTask(taskId);
-  };
-
-  // نقل المهمة إلى القسم المنجز
-  const completeTask = (taskId) => {
-    setTasks(prev => {
-      const taskToComplete = prev.uncompleted.find(task => task.id === taskId);
-      if (!taskToComplete) return prev;
-
-      return {
-        ...prev,
-        uncompleted: prev.uncompleted.filter(task => task.id !== taskId),
-        completed: [...prev.completed, taskToComplete]
-      };
-    });
-    
-    setShowUploadMessage(false);
   };
 
   // رفع ملف للمهمة
@@ -90,7 +196,6 @@ const VolunteerTasks = () => {
       )
     }));
 
-    // إذا كانت هذه المهمة المحددة، قم بإخفاء الرسالة
     if (selectedTask === taskId) {
       setShowUploadMessage(false);
     }
@@ -104,6 +209,23 @@ const VolunteerTasks = () => {
         <h1>لوحة مهام المتطوعين</h1>
         <p>تابع تقدمك في المهام الموكلة إليك وارفع الملفات المكتملة من خلال هذه اللوحة</p>
       </div>
+
+      {/* حالة التحميل */}
+      {isLoading && (
+        <div className="loading-indicator">
+          <i className="fas fa-spinner fa-spin"></i>
+          <span>جاري تحميل المهام...</span>
+        </div>
+      )}
+
+      {/* رسالة خطأ */}
+      {error && (
+        <div className="error-message">
+          <i className="fas fa-exclamation-triangle"></i>
+          <span>{error}</span>
+          <button onClick={() => setError(null)}>إخفاء</button>
+        </div>
+      )}
 
       {/* رسالة تذكير برفع الملف */}
       {showUploadMessage && (
@@ -178,6 +300,13 @@ const VolunteerTasks = () => {
                 </div>
               </div>
             ))}
+            
+            {tasks.uncompleted.length === 0 && !isLoading && (
+              <div className="no-tasks-message">
+                <i className="fas fa-info-circle"></i>
+                <span>لا توجد مهام غير مكتملة</span>
+              </div>
+            )}
           </div>
         </section>
 
@@ -195,11 +324,25 @@ const VolunteerTasks = () => {
                   <div className="file-info">
                     <i className="fas fa-file-audio"></i>
                     <span>{task.file}</span>
+                    <a 
+                      href={`http://localhost:3000/uploads/${task.file}`} 
+                      download
+                      className="download-btn"
+                    >
+                      <i className="fas fa-download"></i> تنزيل
+                    </a>
                   </div>
                 )}
                 <span className="status-badge">✅ مكتمل</span>
               </div>
             ))}
+            
+            {tasks.completed.length === 0 && !isLoading && (
+              <div className="no-tasks-message">
+                <i className="fas fa-info-circle"></i>
+                <span>لا توجد مهام مكتملة بعد</span>
+              </div>
+            )}
           </div>
         </section>
 
@@ -216,9 +359,18 @@ const VolunteerTasks = () => {
                 <span className="status-badge">❌ ملغاة</span>
               </div>
             ))}
+            
+            {tasks.canceled.length === 0 && !isLoading && (
+              <div className="no-tasks-message">
+                <i className="fas fa-info-circle"></i>
+                <span>لا توجد مهام ملغاة</span>
+              </div>
+            )}
           </div>
         </section>
       </div>
+                  <ImgButton />
+
     </div>
   );
 };

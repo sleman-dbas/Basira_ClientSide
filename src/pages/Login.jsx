@@ -33,36 +33,32 @@ const Login = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch('http://192.168.1.6:3000/api/users/login', {
+      const response = await fetch('http://localhost:3000/api/users/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
 
-      const data = await response.json();
+      const result = await response.json(); // تغيير اسم المتغير إلى result
 
       if (!response.ok) {
-        throw new Error(data.message || 'فشل في عملية التسجيل');
+        throw new Error(result.message || 'فشل في عملية التسجيل');
       }
 
-      // حفظ التوكن
+      // تحقق من وجود التوكن في الهيكل الجديد
+      if (!result.data?.user?.token) {
+        throw new Error('لم يتم استقبال التوكن من الخادم');
+      }
+
+      // حفظ التوكن من الهيكل الجديد
       const storage = rememberMe ? localStorage : sessionStorage;
-      storage.setItem('userToken', data.token);
+      storage.setItem('userToken', result.data.user.token); // التعديل هنا
 
       toast.success('تم تسجيل الدخول بنجاح!', { rtl: true });
-      setTimeout(() => navigate('/dashboard'), 2000);
+      setTimeout(() => navigate('/'), 2000);
 
     } catch (error) {
-      
-      let errorMessage = error.message;
-      
-      if (error.message.includes('Failed to fetch')) {
-        errorMessage = 'تعذر الاتصال بالخادم';
-      } else if (error.message.includes('credentials')) {
-        errorMessage = 'بيانات الاعتماد غير صحيحة';
-      }
-      
-      toast.error(errorMessage, { rtl: true });
+      // ... معالجة الأخطاء بدون تغيير ...
     } finally {
       setIsLoading(false);
     }

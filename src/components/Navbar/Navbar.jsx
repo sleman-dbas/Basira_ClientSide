@@ -46,6 +46,7 @@ const Navbar = () => {
           <Link to="/volunteer-tasks" className="nav-link">مهام المتطوعين</Link>
           <Link to="/blind-interface" className="nav-link">واجهة المكفوفين</Link>
           <Link to="/coordinator-dashboard" className="nav-link">لوحة التحكم</Link>
+          <Link to="/admin-dashboard" className="nav-link">لوحة التحكيم المشرف</Link>
 
         </div>
 

@@ -1,24 +1,24 @@
 import { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import '../styles/Signup.css';
 
 const Signup = () => {
     const [formData, setFormData] = useState({
-        fullName: '',
+        username: '',
         age: '',
         gender: '',
-        educationType: '',
+        studyField: '',
         email: '',
         password: '',
-        qualification: '',
-        countryCode: '+963',
-        phone: '',
+        EducationLevel: '',
         telegramId: '',
-        experience: '',
-        preferredTimes: '',
+        preferredRegistrationTime: '',
         registrationSection: '',
-        languages: [],
-        readingFields: []
+        knownLanguages: [],
+        readingInterests: [],
+        studyYear: ''
     });
 
     const [audioFile, setAudioFile] = useState(null);
@@ -27,7 +27,6 @@ const Signup = () => {
     const audioRef = useRef(null);
     const navigate = useNavigate();
 
-    const countryCodes = ['+963', '+966', '+971', '+20', '+1'];
     const qualifications = ['ثانوية عامة', 'دبلوم', 'بكالوريوس', 'ماجستير', 'دكتوراه'];
     const experienceOptions = ['تعليم', 'برمجة', 'تصميم', 'إدارة', 'كتابة محتوى'];
     const timePreferences = ['صباحًا (8-12)', 'ظهرًا (12-4)', 'مساءً (4-8)', 'ليلًا (8-12)'];
@@ -38,31 +37,64 @@ const Signup = () => {
 
     const validateForm = () => {
         const newErrors = {};
-        const phoneRegex = formData.countryCode === '+963' ? /^9\d{8}$/ : /^\d{8,15}$/;
 
-        if (!formData.fullName.trim()) newErrors.fullName = 'الاسم الكامل مطلوب';
-        if (!formData.age || formData.age < 15) newErrors.age = 'العمر يجب أن يكون 15 سنة على الأقل';
-        if (!formData.gender) newErrors.gender = 'الرجاء اختيار الجنس';
-        if (!formData.educationType) newErrors.educationType = 'يرجى اختيار نوع الدراسة';
-        if (formData.password.length < 6) newErrors.password = 'كلمة المرور يجب أن تحتوي على 6 أحرف على الأقل';
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) newErrors.email = 'بريد إلكتروني غير صالح';
-        if (!formData.qualification) newErrors.qualification = 'المؤهل العلمي مطلوب';
-        if (!formData.phone.match(phoneRegex)) newErrors.phone = 'رقم هاتف غير صالح';
-        if (!formData.telegramId.match(/^@?(\w){5,32}$/)) newErrors.telegramId = 'معرّف تلغرام غير صالح';
-        if (!formData.preferredTimes) newErrors.preferredTimes = 'يرجى تحديد التفضيلات الزمنية';
-        if (!formData.registrationSection) newErrors.registrationSection = 'يرجى اختيار قسم التسجيلات';
-        if (formData.languages.length === 0) newErrors.languages = 'الرجاء اختيار لغة واحدة على الأقل';
-        if (formData.readingFields.length === 0) newErrors.readingFields = 'الرجاء اختيار مجال واحد على الأقل';
-        if (!audioFile) newErrors.audio = 'الرجاء رفع ملف صوتي';
-        // التحقق من العمر
+        if (!formData.username.trim()) {
+            newErrors.username = 'الاسم الكامل مطلوب';
+            toast.error('الرجاء إدخال الاسم الكامل');
+        }
         if (!formData.age || formData.age < 15 || formData.age > 100) {
             newErrors.age = 'العمر يجب أن يكون بين 15 و 100 سنة';
+            toast.error('العمر يجب أن يكون بين 15 و 100 سنة');
+        }
+        if (!formData.gender) {
+            newErrors.gender = 'الرجاء اختيار الجنس';
+            toast.error('الرجاء اختيار الجنس');
+        }
+        if (!formData.studyField) {
+            newErrors.studyField = 'يرجى اختيار نوع الدراسة';
+            toast.error('يرجى اختيار نوع الدراسة');
+        }
+        if (formData.password.length < 6) {
+            newErrors.password = 'كلمة المرور يجب أن تحتوي على 6 أحرف على الأقل';
+            toast.error('كلمة المرور يجب أن تحتوي على 6 أحرف على الأقل');
+        }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+            newErrors.email = 'بريد إلكتروني غير صالح';
+            toast.error('بريد إلكتروني غير صالح');
+        }
+        if (!formData.EducationLevel) {
+            newErrors.EducationLevel = 'المؤهل العلمي مطلوب';
+            toast.error('المؤهل العلمي مطلوب');
+        }
+        if (!formData.telegramId.match(/^@?(\w){5,32}$/)) {
+            newErrors.telegramId = 'معرّف تلغرام غير صالح';
+            toast.error('معرّف تلغرام غير صالح');
+        }
+        if (!formData.preferredRegistrationTime) {
+            newErrors.preferredRegistrationTime = 'يرجى تحديد التفضيلات الزمنية';
+            toast.error('يرجى تحديد التفضيلات الزمنية');
+        }
+        if (!formData.registrationSection) {
+            newErrors.registrationSection = 'يرجى اختيار قسم التسجيلات';
+            toast.error('يرجى اختيار قسم التسجيلات');
+        }
+        if (formData.knownLanguages.length === 0) {
+            newErrors.knownLanguages = 'الرجاء اختيار لغة واحدة على الأقل';
+            toast.error('الرجاء اختيار لغة واحدة على الأقل');
+        }
+        if (formData.readingInterests.length === 0) {
+            newErrors.readingInterests = 'الرجاء اختيار مجال واحد على الأقل';
+            toast.error('الرجاء اختيار مجال واحد على الأقل');
+        }
+        if (!audioFile) {
+            newErrors.audio = 'الرجاء رفع ملف صوتي';
+            toast.error('الرجاء رفع ملف صوتي');
+        }
+        if (!formData.studyYear) {
+            newErrors.studyYear = 'سنة الدراسة مطلوبة';
+            toast.error('سنة الدراسة مطلوبة');
         }
 
-        // التحقق من مجال الخبرة
-        if (!formData.experience) {
-            newErrors.experience = 'يرجى اختيار مجال الخبرة';
-        }
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -93,13 +125,16 @@ const Signup = () => {
         if (file) {
             if (!validTypes.includes(file.type)) {
                 setErrors({ ...errors, audio: 'نوع الملف غير مدعوم (MP3/WAV فقط)' });
+                toast.error('نوع الملف غير مدعوم (MP3/WAV فقط)');
                 return;
             }
             if (file.size > maxSize) {
                 setErrors({ ...errors, audio: 'الحجم الأقصى المسموح به: 5MB' });
+                toast.error('الحجم الأقصى المسموح به: 5MB');
                 return;
             }
             setAudioFile(file);
+            toast.success('تم رفع الملف الصوتي بنجاح');
         }
     };
 
@@ -110,6 +145,8 @@ const Signup = () => {
 
         try {
             const form = new FormData();
+            
+            // إضافة الحقول الأساسية
             Object.entries(formData).forEach(([key, value]) => {
                 if (Array.isArray(value)) {
                     value.forEach(item => form.append(key, item));
@@ -117,19 +154,25 @@ const Signup = () => {
                     form.append(key, value);
                 }
             });
-            form.append('phone', formData.countryCode + formData.phone);
-            form.append('audio', audioFile);
+            
+            // إضافة الملف الصوتي باسم 'file' كما يتوقع API
+            form.append('file', audioFile);
 
-            const response = await fetch('http://192.168.1.6:3000/api/students/register', {
+            const response = await fetch('http://localhost:3000/api/volunteers/add-volunteer', {
                 method: 'POST',
                 body: form,
             });
 
-            if (response.ok) navigate('/dashboard');
-            else throw new Error('فشل في عملية التسجيل');
-
+            if (response.ok) {
+                toast.success('تم التسجيل بنجاح! سيتم تحويلك إلى صفحة المتطوع ');
+                setTimeout(() => navigate('/verify-otp'), 3000);
+            } else {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'فشل في عملية التسجيل');
+            }
         } catch (error) {
-            setErrors({ ...errors, api: error.message });
+            toast.error(error.message || 'حدث خطأ غير متوقع');
+            console.error('API Error:', error);
         } finally {
             setIsLoading(false);
         }
@@ -137,22 +180,32 @@ const Signup = () => {
 
     return (
         <main className="signup-container">
+            <ToastContainer 
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={true}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="colored"
+            />
             <div className="signup-box">
                 <h1 className="signup-title">الانضمام لعائلة بصيرة</h1>
-
-                {errors.api && <div className="api-error">⚠️ {errors.api}</div>}
 
                 <form onSubmit={handleSubmit}>
                     <div className="input-group">
                         <label>الاسم الكامل</label>
                         <input
                             type="text"
-                            name="fullName"
-                            value={formData.fullName}
+                            name="username"
+                            value={formData.username}
                             onChange={handleInputChange}
-                            className={errors.fullName ? 'error' : ''}
+                            className={errors.username ? 'error' : ''}
                         />
-                        {errors.fullName && <span className="error-msg">⚠️ {errors.fullName}</span>}
+                        {errors.username && <span className="error-msg">⚠️ {errors.username}</span>}
                     </div>
 
                     <div className="input-group">
@@ -163,9 +216,23 @@ const Signup = () => {
                             value={formData.age}
                             onChange={handleInputChange}
                             min="15"
+                            max="100"
                             className={errors.age ? 'error' : ''}
                         />
                         {errors.age && <span className="error-msg">⚠️ {errors.age}</span>}
+                    </div>
+
+                    <div className="input-group">
+                        <label>سنة الدراسة</label>
+                        <input
+                            type="number"
+                            name="studyYear"
+                            value={formData.studyYear}
+                            onChange={handleInputChange}
+                            min="1"
+                            className={errors.studyYear ? 'error' : ''}
+                        />
+                        {errors.studyYear && <span className="error-msg">⚠️ {errors.studyYear}</span>}
                     </div>
 
                     <div className="input-group">
@@ -186,17 +253,17 @@ const Signup = () => {
                     <div className="input-group">
                         <label>نوع الدراسة</label>
                         <select
-                            name="educationType"
-                            value={formData.educationType}
+                            name="studyField"
+                            value={formData.studyField}
                             onChange={handleInputChange}
-                            className={errors.educationType ? 'error' : ''}
+                            className={errors.studyField ? 'error' : ''}
                         >
                             <option value="">اختر نوع الدراسة</option>
                             {educationTypes.map((type, i) => (
                                 <option key={i} value={type}>{type}</option>
                             ))}
                         </select>
-                        {errors.educationType && <span className="error-msg">⚠️ {errors.educationType}</span>}
+                        {errors.studyField && <span className="error-msg">⚠️ {errors.studyField}</span>}
                     </div>
 
                     <div className="input-group">
@@ -226,35 +293,17 @@ const Signup = () => {
                     <div className="input-group">
                         <label>المؤهل العلمي</label>
                         <select
-                            name="qualification"
-                            value={formData.qualification}
+                            name="EducationLevel"
+                            value={formData.EducationLevel}
                             onChange={handleInputChange}
-                            className={errors.qualification ? 'error' : ''}
+                            className={errors.EducationLevel ? 'error' : ''}
                         >
                             <option value="">اختر المؤهل</option>
                             {qualifications.map((q, i) => (
                                 <option key={i} value={q}>{q}</option>
                             ))}
                         </select>
-                        {errors.qualification && <span className="error-msg">⚠️ {errors.qualification}</span>}
-                    </div>
-
-                    <div className="input-group">
-                        <label>رقم الهاتف (واتساب/تلغرام)</label>
-                        <div className="phone-input">
-
-                            <input
-                                type="tel"
-                                name="phone"
-                                value={formData.phone}
-                                onChange={handleInputChange}
-                                placeholder={formData.countryCode === '+963' ? '9xxxxxxx' : 'xxxxxxxx'}
-                                className={errors.phone ? 'error' : ''}
-                            />
-                        </div>
-                        {formData.countryCode !== '+963' &&
-                            <span className="info-text">الرجاء إضافة مفتاح الدولة المناسب</span>}
-                        {errors.phone && <span className="error-msg">⚠️ {errors.phone}</span>}
+                        {errors.EducationLevel && <span className="error-msg">⚠️ {errors.EducationLevel}</span>}
                     </div>
 
                     <div className="input-group">
@@ -271,35 +320,19 @@ const Signup = () => {
                     </div>
 
                     <div className="input-group">
-                        <label>مجال الخبرة</label>
-                        <select
-                            name="experience"
-                            value={formData.experience}
-                            onChange={handleInputChange}
-                            className={errors.experience ? 'error' : ''}
-                        >
-                            <option value="">اختر مجال الخبرة</option>
-                            {experienceOptions.map((exp, i) => (
-                                <option key={i} value={exp}>{exp}</option>
-                            ))}
-                        </select>
-                        {errors.experience && <span className="error-msg">⚠️ {errors.experience}</span>}
-                    </div>
-
-                    <div className="input-group">
                         <label>الوقت المفضل للتسجيل</label>
                         <select
-                            name="preferredTimes"
-                            value={formData.preferredTimes}
+                            name="preferredRegistrationTime"
+                            value={formData.preferredRegistrationTime}
                             onChange={handleInputChange}
-                            className={errors.preferredTimes ? 'error' : ''}
+                            className={errors.preferredRegistrationTime ? 'error' : ''}
                         >
                             <option value="">اختر الوقت المناسب</option>
                             {timePreferences.map((t, i) => (
                                 <option key={i} value={t}>{t}</option>
                             ))}
                         </select>
-                        {errors.preferredTimes && <span className="error-msg">⚠️ {errors.preferredTimes}</span>}
+                        {errors.preferredRegistrationTime && <span className="error-msg">⚠️ {errors.preferredRegistrationTime}</span>}
                     </div>
 
                     <div className="input-group">
@@ -323,28 +356,28 @@ const Signup = () => {
                         <div className="multi-select-container">
                             <select
                                 multiple
-                                value={formData.languages}
-                                onChange={(e) => handleMultiSelect(e, 'languages')}
-                                className={`multi-select ${errors.languages ? 'error' : ''}`}
+                                value={formData.knownLanguages}
+                                onChange={(e) => handleMultiSelect(e, 'knownLanguages')}
+                                className={`multi-select ${errors.knownLanguages ? 'error' : ''}`}
                             >
                                 {languageOptions.map((lang, i) => (
                                     <option key={i} value={lang}>{lang}</option>
                                 ))}
                             </select>
                             <div className="selected-items">
-                                {formData.languages.map(lang => (
+                                {formData.knownLanguages.map(lang => (
                                     <span key={lang} className="selected-tag">
                                         {lang}
                                         <button
                                             type="button"
-                                            onClick={() => handleDeselect('languages', lang)}
+                                            onClick={() => handleDeselect('knownLanguages', lang)}
                                         >×</button>
                                     </span>
                                 ))}
                             </div>
                         </div>
                         <small className="select-hint">استخدم Ctrl/Command لتحديد عدة خيارات</small>
-                        {errors.languages && <span className="error-msg">⚠️ {errors.languages}</span>}
+                        {errors.knownLanguages && <span className="error-msg">⚠️ {errors.knownLanguages}</span>}
                     </div>
 
                     <div className="input-group">
@@ -352,28 +385,28 @@ const Signup = () => {
                         <div className="multi-select-container">
                             <select
                                 multiple
-                                value={formData.readingFields}
-                                onChange={(e) => handleMultiSelect(e, 'readingFields')}
-                                className={`multi-select ${errors.readingFields ? 'error' : ''}`}
+                                value={formData.readingInterests}
+                                onChange={(e) => handleMultiSelect(e, 'readingInterests')}
+                                className={`multi-select ${errors.readingInterests ? 'error' : ''}`}
                             >
                                 {readingFieldOptions.map((field, i) => (
                                     <option key={i} value={field}>{field}</option>
                                 ))}
                             </select>
                             <div className="selected-items">
-                                {formData.readingFields.map(field => (
+                                {formData.readingInterests.map(field => (
                                     <span key={field} className="selected-tag">
                                         {field}
                                         <button
                                             type="button"
-                                            onClick={() => handleDeselect('readingFields', field)}
+                                            onClick={() => handleDeselect('readingInterests', field)}
                                         >×</button>
                                     </span>
                                 ))}
                             </div>
                         </div>
                         <small className="select-hint">استخدم Ctrl/Command لتحديد عدة خيارات</small>
-                        {errors.readingFields && <span className="error-msg">⚠️ {errors.readingFields}</span>}
+                        {errors.readingInterests && <span className="error-msg">⚠️ {errors.readingInterests}</span>}
                     </div>
 
                     <div className="input-group">
