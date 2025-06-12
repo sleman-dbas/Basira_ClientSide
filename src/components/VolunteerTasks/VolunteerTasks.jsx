@@ -201,6 +201,37 @@ const VolunteerTasks = () => {
     }
   };
 
+  // تحميل المهام غير المنجزة كملف CSV
+  const downloadUncompletedTasks = () => {
+    if (tasks.uncompleted.length === 0) {
+      toast.info('لا توجد مهام غير مكتملة للتحميل', { rtl: true });
+      return;
+    }
+
+    // إنشاء محتوى CSV
+    const header = "عنوان المهمة,حالة الملف\n";
+    const rows = tasks.uncompleted.map(task => 
+      `"${task.title}","${task.file ? task.file : 'لم يتم رفع الملف'}"`
+    ).join("\n");
+
+    const csvContent = header + rows;
+    
+    // إنشاء ملف وتنزيله
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'المهام_الغير_منجزة.csv');
+    link.style.visibility = 'hidden';
+    
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    toast.success('تم تحميل المهام غير المنجزة بنجاح', { rtl: true });
+  };
+
   return (
     <div className="volunteer-tasks-container" dir="rtl">
       <Navbar />
@@ -244,10 +275,18 @@ const VolunteerTasks = () => {
       <div className="tasks-grid">
         {/* المهام غير المنجزة */}
         <section className="tasks-section uncompleted-tasks">
-          <h2 className="section-title">
-            <i className="fas fa-tasks"></i>
-            المهام غير المنجزة ({tasks.uncompleted.length})
-          </h2>
+          <div className="section-header">
+            <h2 className="section-title">
+              <i className="fas fa-tasks"></i>
+              المهام غير المنجزة ({tasks.uncompleted.length})
+            </h2>
+            <button 
+              className="download-tasks-btn"
+              onClick={downloadUncompletedTasks}
+            >
+              <i className="fas fa-download"></i> تحميل المهام
+            </button>
+          </div>
           <div className="tasks-list">
             {tasks.uncompleted.map(task => (
               <div key={task.id} className="task-item">
@@ -369,8 +408,7 @@ const VolunteerTasks = () => {
           </div>
         </section>
       </div>
-                  <ImgButton />
-
+      <ImgButton />
     </div>
   );
 };

@@ -29,11 +29,10 @@ const Signup = () => {
 
     const qualifications = ['ثانوية عامة', 'دبلوم', 'بكالوريوس', 'ماجستير', 'دكتوراه'];
     const experienceOptions = ['تعليم', 'برمجة', 'تصميم', 'إدارة', 'كتابة محتوى'];
-    const timePreferences = ['صباحًا (8-12)', 'ظهرًا (12-4)', 'مساءً (4-8)', 'ليلًا (8-12)'];
+    const timePreferences = [' 2', '3', '4', '6'];
     const registrationSections = ['قسم القران','قسم الرياضيات', 'قسم الشعر','قسم الحقوق'];
     const languageOptions = ['العربية', 'الإنجليزية', 'الفرنسية', 'الألمانية', 'الإسبانية'];
-    const readingFieldOptions = ['العلوم الطبية', 'الهندسة', 'العلوم الإنسانية', 'البرمجة', 'التصميم'];
-    const educationTypes = ['طب بشري', 'طب أسنان', 'صيدلة', 'هندسة مدنية', 'هندسة معمارية', 'هندسة معلوماتية', 'هندسة ميكانيك'];
+    const educationTypes = ['طب بشري', 'طب أسنان', 'صيدلة', 'هندسات', 'حقوق', 'هندسة معلوماتية', ' اداب'];
 
     const validateForm = () => {
         const newErrors = {};
@@ -314,20 +313,18 @@ const Signup = () => {
                             value={formData.telegramId}
                             onChange={handleInputChange}
                             placeholder="@username"
-                            className={errors.telegramId ? 'error' : ''}
                         />
-                        {errors.telegramId && <span className="error-msg">⚠️ {errors.telegramId}</span>}
                     </div>
 
                     <div className="input-group">
-                        <label>الوقت المفضل للتسجيل</label>
+                        <label>عدد الساعات</label>
                         <select
                             name="preferredRegistrationTime"
                             value={formData.preferredRegistrationTime}
                             onChange={handleInputChange}
                             className={errors.preferredRegistrationTime ? 'error' : ''}
                         >
-                            <option value="">اختر الوقت المناسب</option>
+                            <option value="">اختر عدد الساعات المخصصة للفريق</option>
                             {timePreferences.map((t, i) => (
                                 <option key={i} value={t}>{t}</option>
                             ))}
@@ -380,34 +377,7 @@ const Signup = () => {
                         {errors.knownLanguages && <span className="error-msg">⚠️ {errors.knownLanguages}</span>}
                     </div>
 
-                    <div className="input-group">
-                        <label>مجالات القراءة</label>
-                        <div className="multi-select-container">
-                            <select
-                                multiple
-                                value={formData.readingInterests}
-                                onChange={(e) => handleMultiSelect(e, 'readingInterests')}
-                                className={`multi-select ${errors.readingInterests ? 'error' : ''}`}
-                            >
-                                {readingFieldOptions.map((field, i) => (
-                                    <option key={i} value={field}>{field}</option>
-                                ))}
-                            </select>
-                            <div className="selected-items">
-                                {formData.readingInterests.map(field => (
-                                    <span key={field} className="selected-tag">
-                                        {field}
-                                        <button
-                                            type="button"
-                                            onClick={() => handleDeselect('readingInterests', field)}
-                                        >×</button>
-                                    </span>
-                                ))}
-                            </div>
-                        </div>
-                        <small className="select-hint">استخدم Ctrl/Command لتحديد عدة خيارات</small>
-                        {errors.readingInterests && <span className="error-msg">⚠️ {errors.readingInterests}</span>}
-                    </div>
+                    
 
                     <div className="input-group">
                         <label>رفع ملف صوتي (60 ثانية كحد أقصى)</label>
