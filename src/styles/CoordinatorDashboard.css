@@ -31,7 +31,6 @@
 }
 
 .search-input {
-  max-width: 500px;
   padding: 0.8rem 1.2rem;
   border: 2px solid #1A237E;
   border-radius: 30px;
@@ -58,7 +57,6 @@
 .urgent-files-section {
   background: white;
   border-radius: 10px;
-  padding: 1.5rem;
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
@@ -492,14 +490,137 @@
   10%, 90% { opacity: 1; transform: translateY(0); }
 }
 
+/* أنماط جديدة لإدارة معرض الصور */
+.gallery-management-section {
+  margin-top: 3rem;
+  background: white;
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.add-image-btn {
+  background-color: #1A237E;
+  color: #FFA500;
+  border: none;
+  padding: 0.7rem 1.2rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+  white-space: nowrap;
+}
+
+.add-image-btn:hover {
+  background-color: #0d153d;
+}
+
+.gallery-images {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.image-card {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: transform 0.3s;
+}
+
+.image-card:hover {
+  transform: translateY(-5px);
+}
+
+.gallery-thumbnail {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+.image-details {
+  padding: 1rem;
+  background: #f8f9fa;
+}
+
+.image-description {
+  margin: 0;
+  color: #1A237E;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.image-actions {
+  display: flex;
+  gap: 0.8rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.edit-btn, .delete-btn {
+  flex: 1;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: opacity 0.3s;
+  min-width: 100px;
+}
+
+.edit-btn {
+  background-color: #1A237E;
+  color: #FFA500;
+}
+
+.delete-btn {
+  background-color: #c62828;
+  color: white;
+}
+
+.edit-btn:hover, .delete-btn:hover {
+  opacity: 0.9;
+}
+
 /* أنماط للهواتف */
 @media (max-width: 992px) {
   .dashboard-layout {
     grid-template-columns: 1fr;
   }
-}
-
-@media (max-width: 768px) {
+  
+  .dashboard-title {
+    font-size: 1.6rem;
+  }
+  
+  .section-title {
+    font-size: 1.2rem;
+  }
+  
+  .file-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .file-icon {
+    margin-left: 0;
+    margin-bottom: 1rem;
+  }
+  
+  .drag-icon {
+    align-self: flex-end;
+    margin-top: 1rem;
+  }
+  
   .volunteers-table {
     display: block;
     overflow-x: auto;
@@ -519,28 +640,105 @@
     font-size: 1.2rem;
   }
   
-  .dashboard-title {
-    font-size: 1.6rem;
+  .search-input {
+    padding: 0.7rem 1rem;
   }
   
-  .file-card {
+  .gallery-images {
+    grid-template-columns: 1fr;
+  }
+  
+  .section-header {
     flex-direction: column;
     align-items: flex-start;
   }
-  
-  .file-icon {
-    margin-left: 0;
-    margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+  .volunteers-table {
+    font-size: 0.85rem;
   }
   
-  .drag-icon {
-    align-self: flex-end;
+  .volunteers-table th,
+  .volunteers-table td {
+    padding: 0.6rem;
+  }
+  
+  .upload-btn {
+    padding: 0.5rem 0.8rem;
+    min-width: 100px;
+    font-size: 0.85rem;
+  }
+  
+  .status-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.3rem;
+  }
+  
+  .drop-zone {
+    padding: 1.5rem;
+  }
+  
+  .upload-icon {
+    font-size: 2.5rem;
+  }
+  
+  .process-btn {
+    padding: 0.8rem;
+    font-size: 0.9rem;
   }
 }
 
 @media (max-width: 480px) {
+  .dashboard-title {
+    font-size: 1.4rem;
+  }
+  
+  .volunteers-table th,
+  .volunteers-table td {
+    padding: 0.5rem;
+    font-size: 0.8rem;
+  }
+  
+  .volunteers-table th:nth-child(2),
+  .volunteers-table td:nth-child(2) {
+    display: none;
+  }
+  
   .modal-actions {
     flex-direction: column;
   }
   
+  .modal-actions button {
+    width: 100%;
+  }
+  
+  .gallery-management-section {
+    padding: 1rem;
+  }
+  
+  .image-actions {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .edit-btn, .delete-btn {
+    width: 100%;
+  }
+  
+  .file-details {
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  
+  .file-select-label {
+    padding: 0.7rem 1.2rem;
+    font-size: 0.9rem;
+  }
+  
+  .add-image-btn {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+  }
 }

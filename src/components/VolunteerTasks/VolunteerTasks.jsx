@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './VolunteerTasks.css';
 import Navbar from '../../components/Navbar/Navbar';
-import ImgButton from '../../components/ImgButton/ImgButton';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import VolunteerTasksButton from '../../components/VolunteerTasksButton/VolunteerTasksButton';
 
 const VolunteerTasks = () => {
   const [tasks, setTasks] = useState({
@@ -408,7 +408,8 @@ const VolunteerTasks = () => {
           </div>
         </section>
       </div>
-      <ImgButton />
+            <VolunteerTasksButton tasks={tasks} />
+
     </div>
   );
 };

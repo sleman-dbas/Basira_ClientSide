@@ -198,16 +198,7 @@ const CoordinatorDashboard = () => {
       <div className="dashboard-container">
         <h1 className="dashboard-title">لوحة تحكم المنسق</h1>
         
-        <div className="search-container">
-          <input
-            type="text"
-            placeholder="ابحث عن متطوع..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="search-input"
-            aria-label="بحث عن متطوعين"
-          />
-        </div>
+        
         
         <div className="dashboard-layout">
           {/* قسم الملفات المستعجلة على اليمين */}
@@ -290,7 +281,16 @@ const CoordinatorDashboard = () => {
             </div>
           </div>
         </div>
-        
+        <div className="search-container">
+          <input
+            type="text"
+            placeholder="ابحث عن متطوع..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="search-input"
+            aria-label="بحث عن متطوعين"
+          />
+        </div>
         <div className="table-container">
           <table className="volunteers-table">
             <thead>

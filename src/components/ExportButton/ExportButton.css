@@ -1,0 +1,25 @@
+/* src/components/ExportButton/ExportButton.css */
+.export-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background-color: #1A237E;
+  color: #FFA500;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 15px;
+}
+
+.export-btn:hover {
+  background-color: #0d153d;
+  transform: translateY(-2px);
+}
+
+.export-btn svg {
+  width: 20px;
+  height: 20px;
+}

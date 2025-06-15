@@ -1,6 +1,8 @@
+// src/components/VolunteerStatsButton/VolunteerStatsButton.jsx
 import React, { useState, useEffect } from 'react';
 import './VolunteerStatsButton.css';
 import { FaUsers, FaSearch, FaTimes } from 'react-icons/fa';
+import ExportButton from '../ExportButton/ExportButton';
 
 const VolunteerStatsButton = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -29,6 +31,12 @@ const VolunteerStatsButton = () => {
   const filteredVolunteers = volunteers.filter(volunteer => 
     volunteer.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  // دالة لاستخراج إحصائيات المتطوعين
+  const exportVolunteerStats = () => {
+    // هنا يمكن إضافة منطق تصدير البيانات (CSV, PDF, etc.)
+    alert('تم استخراج إحصائيات المتطوعين بنجاح!');
+  };
 
   return (
     <>
@@ -98,6 +106,11 @@ const VolunteerStatsButton = () => {
                   <p>لا توجد نتائج مطابقة للبحث</p>
                 </div>
               )}
+            </div>
+            
+            {/* زر استخراج الإحصائيات */}
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '15px' }}>
+              <ExportButton onClick={exportVolunteerStats} />
             </div>
           </div>
         </div>

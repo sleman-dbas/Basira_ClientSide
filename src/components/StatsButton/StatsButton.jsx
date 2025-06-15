@@ -1,5 +1,7 @@
+// src/components/StatsButton/StatsButton.jsx
 import React, { useState } from 'react';
 import './StatsButton.css';
+import ExportButton from '../ExportButton/ExportButton';
 
 const StatsButton = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -14,6 +16,12 @@ const StatsButton = () => {
 
   const toggleStats = () => {
     setIsOpen(!isOpen);
+  };
+
+  // دالة لاستخراج إحصائيات المشروع
+  const exportProjectStats = () => {
+    // هنا يمكن إضافة منطق تصدير البيانات (CSV, PDF, etc.)
+    alert('تم استخراج إحصائيات المشروع بنجاح!');
   };
 
   return (
@@ -69,6 +77,11 @@ const StatsButton = () => {
                 <div className="stat-value">{statsData.conversionRate}</div>
                 <div className="stat-label">معدل التحويل</div>
               </div>
+            </div>
+            
+            {/* زر استخراج الإحصائيات */}
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '15px' }}>
+              <ExportButton onClick={exportProjectStats} />
             </div>
           </div>
         </div>
