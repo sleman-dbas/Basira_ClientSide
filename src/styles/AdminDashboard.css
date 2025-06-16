@@ -459,7 +459,7 @@
   .modal-actions {
     flex-direction: column;
   }
-  
+
   .save-btn, .cancel-btn {
     width: 100%;
   }
