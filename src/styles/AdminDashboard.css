@@ -1,4 +1,3 @@
-/* src/styles/AdminDashboard.css */
 /* أنماط أساسية للوصولية */
 *:focus {
   outline: 2px solid #FFA500;
@@ -25,6 +24,44 @@
   font-size: 2rem;
 }
 
+/* أنماط التبويبات */
+.tabs-container {
+  display: flex;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.tab-btn {
+  padding: 0.8rem 1.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #555;
+  position: relative;
+  transition: all 0.3s;
+}
+
+.tab-btn.active {
+  color: #1A237E;
+}
+
+.tab-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: #1A237E;
+}
+
+.tab-btn:hover:not(.active) {
+  background-color: #f0f4ff;
+}
+
+/* أنماط البحث والإضافة */
 .search-container {
   margin-bottom: 1.5rem;
   display: flex;
@@ -60,7 +97,7 @@
   transform: translateY(-2px);
 }
 
-/* أنماط الجدول */
+/* أنماط الجداول */
 .table-container {
   overflow-x: auto;
   margin-top: 1.5rem;
@@ -69,28 +106,29 @@
   background: white;
 }
 
-.employees-table {
+.employees-table, .requests-table {
   width: 100%;
   border-collapse: collapse;
 }
 
-.employees-table th,
-.employees-table td {
+.employees-table th, .employees-table td,
+.requests-table th, .requests-table td {
   padding: 1rem;
   text-align: right;
   border-bottom: 1px solid #e0e0e0;
 }
 
-.employees-table th {
+.employees-table th, .requests-table th {
   background-color: #1A237E;
   color: #FFA500;
   font-weight: bold;
 }
 
-.employees-table tr:hover {
+.employees-table tr:hover, .requests-table tr:hover {
   background-color: #f0f4ff;
 }
 
+/* أنماط إدارة الموظفين */
 .permissions-container {
   display: flex;
   flex-wrap: wrap;
@@ -107,12 +145,13 @@
   white-space: nowrap;
 }
 
-.actions-container {
+.actions-container, .request-actions {
   display: flex;
   gap: 0.5rem;
 }
 
-.edit-btn, .delete-btn {
+.edit-btn, .delete-btn,
+.accept-btn, .reject-btn {
   padding: 0.5rem 1rem;
   border: none;
   border-radius: 4px;
@@ -139,7 +178,77 @@
   background-color: #D32F2F;
 }
 
-/* أنماط النافذة المنبثقة */
+/* أنماط طلبات المتطوعين */
+.volunteer-requests-section {
+  margin-top: 1rem;
+}
+
+.section-title {
+  color: #1A237E;
+  border-bottom: 2px solid #FFA500;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+  font-size: 1.4rem;
+}
+
+.requests-table-container {
+  overflow-x: auto;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  border-radius: 10px;
+  background: white;
+}
+
+.audio-player-container {
+  max-width: 250px;
+}
+
+.audio-player {
+  width: 100%;
+  height: 40px;
+}
+
+.status-badge {
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.status-badge.pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.status-badge.accepted {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-badge.rejected {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.accept-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.accept-btn:hover {
+  background-color: #218838;
+}
+
+.reject-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.reject-btn:hover {
+  background-color: #c82333;
+}
+
+/* أنماط النوافذ المنبثقة */
 .modal {
   position: fixed;
   top: 0;
@@ -212,7 +321,8 @@
 }
 
 .form-group input,
-.form-group select {
+.form-group select,
+.form-group textarea {
   width: 100%;
   padding: 0.8rem;
   border: 1px solid #ddd;
@@ -278,6 +388,7 @@
   transform: translateY(-2px);
 }
 
+/* الإشعارات */
 .notification {
   position: fixed;
   bottom: 20px;
@@ -303,13 +414,13 @@
     align-items: stretch;
   }
   
-  .employees-table {
+  .employees-table, .requests-table {
     display: block;
     overflow-x: auto;
   }
   
-  .employees-table th,
-  .employees-table td {
+  .employees-table th, .employees-table td,
+  .requests-table th, .requests-table td {
     padding: 0.8rem;
     font-size: 0.9rem;
   }
@@ -330,12 +441,17 @@
     font-size: 1.6rem;
   }
   
-  .actions-container {
+  .actions-container, .request-actions {
     flex-direction: column;
   }
   
-  .edit-btn, .delete-btn {
+  .edit-btn, .delete-btn,
+  .accept-btn, .reject-btn {
     width: 100%;
+  }
+  
+  .audio-player {
+    width: 150px;
   }
 }
 

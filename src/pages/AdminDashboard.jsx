@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar/Navbar';
 import '../styles/AdminDashboard.css';
 import StatsButton from '../components/StatsButton/StatsButton';
@@ -12,12 +12,47 @@ const AdminDashboard = () => {
     { id: 4, name: 'لمى عبد الله', email: 'lama@support.com', role: 'دعم فني', permissions: ['دعم المستخدمين', 'إصلاح المشاكل'] },
   ]);
 
+  // حالات طلبات المتطوعين
+  const [volunteerRequests, setVolunteerRequests] = useState([
+    { 
+      id: 1, 
+      name: 'علي محمود', 
+      email: 'ali@example.com', 
+      phone: '0958123456', 
+      skills: 'تحويل النصوص، مساعدة دراسية', 
+      status: 'قيد المراجعة',
+      voiceNote: '/audio/request1.mp3',
+      submissionDate: '2024-05-20'
+    },
+    { 
+      id: 2, 
+      name: 'سلمى كمال', 
+      email: 'salma@example.com', 
+      phone: '0933123456', 
+      skills: 'التدريس، القراءة الصوتية', 
+      status: 'قيد المراجعة',
+      voiceNote: '/audio/request2.mp3',
+      submissionDate: '2024-05-19'
+    },
+    { 
+      id: 3, 
+      name: 'ياسر عمر', 
+      email: 'yasser@example.com', 
+      phone: '0945123456', 
+      skills: 'البرمجة، الترجمة', 
+      status: 'مقبول',
+      voiceNote: '/audio/request3.mp3',
+      submissionDate: '2024-05-18'
+    },
+  ]);
+
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [currentEmployee, setCurrentEmployee] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [newEmployee, setNewEmployee] = useState({ name: '', email: '', role: '', permissions: [] });
   const [notification, setNotification] = useState('');
+  const [activeTab, setActiveTab] = useState('employees'); // إدارة التبويبات
 
   // قائمة الصلاحيات المتاحة
   const availablePermissions = [
@@ -99,6 +134,19 @@ const AdminDashboard = () => {
     setShowEditModal(true);
   };
 
+  // معالجة طلبات المتطوعين
+  const handleRequestAction = (id, action) => {
+    setVolunteerRequests(requests => 
+      requests.map(request => 
+        request.id === id ? { ...request, status: action } : request
+      )
+    );
+    
+    const actionText = action === 'مقبول' ? 'قبول' : 'رفض';
+    setNotification(`تم ${actionText} طلب المتطوع بنجاح`);
+    setTimeout(() => setNotification(''), 3000);
+  };
+
   return (
     <div className="admin-dashboard" role="main" aria-label="لوحة تحكم المدير">
       <Navbar />
@@ -106,72 +154,160 @@ const AdminDashboard = () => {
       <div className="dashboard-container">
         <h1 className="dashboard-title">لوحة تحكم المدير</h1>
         
-        <div className="search-container">
-          <input
-            type="text"
-            placeholder="ابحث عن موظف..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="search-input"
-            aria-label="بحث عن موظفين"
-          />
+        <div className="tabs-container">
           <button 
-            className="add-employee-btn"
-            onClick={() => setShowAddModal(true)}
+            className={`tab-btn ${activeTab === 'employees' ? 'active' : ''}`}
+            onClick={() => setActiveTab('employees')}
           >
-            إضافة موظف جديد
+            إدارة الموظفين
+          </button>
+          <button 
+            className={`tab-btn ${activeTab === 'volunteers' ? 'active' : ''}`}
+            onClick={() => setActiveTab('volunteers')}
+          >
+            طلبات المتطوعين
           </button>
         </div>
         
-        <div className="table-container">
-          <table className="employees-table">
-            <thead>
-              <tr>
-                <th>الاسم</th>
-                <th>البريد الإلكتروني</th>
-                <th>الدور</th>
-                <th>الصلاحيات</th>
-                <th>الإجراءات</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredEmployees.map(employee => (
-                <tr key={employee.id}>
-                  <td>{employee.name}</td>
-                  <td>{employee.email}</td>
-                  <td>{employee.role}</td>
-                  <td>
-                    <div className="permissions-container">
-                      {employee.permissions.map(permission => (
-                        <span key={permission} className="permission-badge">
-                          {permission}
+        {activeTab === 'employees' ? (
+          <>
+            <div className="search-container">
+              <input
+                type="text"
+                placeholder="ابحث عن موظف..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="search-input"
+                aria-label="بحث عن موظفين"
+              />
+              <button 
+                className="add-employee-btn"
+                onClick={() => setShowAddModal(true)}
+              >
+                إضافة موظف جديد
+              </button>
+            </div>
+            
+            <div className="table-container">
+              <table className="employees-table">
+                <thead>
+                  <tr>
+                    <th>الاسم</th>
+                    <th>البريد الإلكتروني</th>
+                    <th>الدور</th>
+                    <th>الصلاحيات</th>
+                    <th>الإجراءات</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredEmployees.map(employee => (
+                    <tr key={employee.id}>
+                      <td>{employee.name}</td>
+                      <td>{employee.email}</td>
+                      <td>{employee.role}</td>
+                      <td>
+                        <div className="permissions-container">
+                          {employee.permissions.map(permission => (
+                            <span key={permission} className="permission-badge">
+                              {permission}
+                            </span>
+                          ))}
+                        </div>
+                      </td>
+                      <td>
+                        <div className="actions-container">
+                          <button 
+                            onClick={() => openEditModal(employee)}
+                            className="edit-btn"
+                            aria-label={`تعديل بيانات ${employee.name}`}
+                          >
+                            تعديل
+                          </button>
+                          <button 
+                            onClick={() => handleDeleteEmployee(employee.id)}
+                            className="delete-btn"
+                            aria-label={`حذف ${employee.name}`}
+                          >
+                            حذف
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+        ) : (
+          <div className="volunteer-requests-section">
+            <h2 className="section-title">طلبات التطوع</h2>
+            
+            <div className="requests-table-container">
+              <table className="requests-table">
+                <thead>
+                  <tr>
+                    <th>الاسم</th>
+                    <th>البريد الإلكتروني</th>
+                    <th>الهاتف</th>
+                    <th>المهارات</th>
+                    <th>التسجيل الصوتي</th>
+                    <th>تاريخ التقديم</th>
+                    <th>الحالة</th>
+                    <th>الإجراءات</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {volunteerRequests.map(request => (
+                    <tr key={request.id}>
+                      <td>{request.name}</td>
+                      <td>{request.email}</td>
+                      <td>{request.phone}</td>
+                      <td>{request.skills}</td>
+                      <td>
+                        {request.voiceNote && (
+                          <div className="audio-player-container">
+                            <audio controls className="audio-player">
+                              <source src={request.voiceNote} type="audio/mpeg" />
+                              المتصفح لا يدعم تشغيل الصوتيات
+                            </audio>
+                          </div>
+                        )}
+                      </td>
+                      <td>{request.submissionDate}</td>
+                      <td>
+                        <span className={`status-badge ${request.status === 'مقبول' ? 'accepted' : request.status === 'مرفوض' ? 'rejected' : 'pending'}`}>
+                          {request.status}
                         </span>
-                      ))}
-                    </div>
-                  </td>
-                  <td>
-                    <div className="actions-container">
-                      <button 
-                        onClick={() => openEditModal(employee)}
-                        className="edit-btn"
-                        aria-label={`تعديل بيانات ${employee.name}`}
-                      >
-                        تعديل
-                      </button>
-                      <button 
-                        onClick={() => handleDeleteEmployee(employee.id)}
-                        className="delete-btn"
-                        aria-label={`حذف ${employee.name}`}
-                      >
-                        حذف
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                      </td>
+                      <td>
+                        <div className="request-actions">
+                          {request.status === 'قيد المراجعة' && (
+                            <>
+                              <button 
+                                onClick={() => handleRequestAction(request.id, 'مقبول')}
+                                className="accept-btn"
+                                aria-label={`قبول طلب ${request.name}`}
+                              >
+                                قبول
+                              </button>
+                              <button 
+                                onClick={() => handleRequestAction(request.id, 'مرفوض')}
+                                className="reject-btn"
+                                aria-label={`رفض طلب ${request.name}`}
+                              >
+                                رفض
+                              </button>
+                            </>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
       </div>
       
       {/* نافذة إضافة موظف جديد */}
@@ -365,8 +501,7 @@ const AdminDashboard = () => {
           {notification}
         </div>
       )}
-            <StatsButton />
-      
+      <StatsButton />
     </div>
   );
 };
